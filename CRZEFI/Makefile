@@ -9,15 +9,28 @@ LIB32           = /usr/lib32
 LIB64           = /usr/lib
 
 CFLAGS          = $(EFIINCS) -fno-stack-protector -fpic \
-		  -fshort-wchar -mno-red-zone -Wall
+		  -fshort-wchar -Wall
 
 ifeq ($(ARCH),x86_64)
   CFLAGS += -DEFI_FUNCTION_WRAPPER
+  CFLAGS += -mno-red-zone
   LIB           = $(LIB64)
   EFILIB        = $(LIB64)
 endif
 
 ifeq ($(ARCH),ia32)
+  LIB           = $(LIB32)
+  EFILIB        = $(LIB32)
+endif
+
+# Add support for aarch64 (ARM64)
+ifeq ($(ARCH),aarch64)
+  LIB           = $(LIB64)
+  EFILIB        = $(LIB64)
+endif
+
+# Add support for arm32 (ARMv7)
+ifeq ($(ARCH),arm32)
   LIB           = $(LIB32)
   EFILIB        = $(LIB32)
 endif
